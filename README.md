@@ -1,5 +1,7 @@
 # srtool
 
+Install: `pip install srtool-cli` (command: `srtool`)
+
 Zero-dependency Python CLI to fix `.srt` subtitles: shift, rescale (fps change), two-point sync (drift), merge, clean, renumber.
 
 ```
