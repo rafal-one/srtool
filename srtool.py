@@ -51,6 +51,8 @@ def rescale(subs, factor):
 
 def sync(subs, t1_old, t1_new, t2_old, t2_new):
     """Linear map so that t1_old->t1_new and t2_old->t2_new (fixes drift / fps mismatch)."""
+    if t2_old == t1_old:
+        raise ValueError("sync: the two old timestamps must differ")
     k = (t2_new - t1_new) / (t2_old - t1_old)
     return [[t1_new + (a - t1_old) * k, t1_new + (b - t1_old) * k, t] for a, b, t in subs]
 
@@ -90,6 +92,14 @@ def main(argv=None):
         if name == "merge":
             s.add_argument("other"); s.add_argument("--offset", type=float, default=0.0, help="seconds added to other")
     a = p.parse_args(argv)
+    try:
+        return _run(a)
+    except (OSError, ValueError) as e:
+        print(f"srtool: error: {e}", file=sys.stderr)
+        return 2
+
+
+def _run(a):
     read = lambda f: parse(open(f, encoding="utf-8-sig", errors="replace").read())
     subs = read(a.input)
     if a.cmd == "shift": subs = shift(subs, a.seconds * 1000)
@@ -102,7 +112,8 @@ def main(argv=None):
         open(a.output, "w", encoding="utf-8").write(out)
     else:
         sys.stdout.write(out)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

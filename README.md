@@ -13,3 +13,5 @@ Handles BOM, CRLF, missing indexes. Tests: `python3 -m pytest tests`.
 
 ## Support
 If it saved you time, donations via PayPal: 4433@vp.pl
+
+Donate: https://paypal.me/RafalBaranowski
